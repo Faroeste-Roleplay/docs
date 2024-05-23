@@ -11,4 +11,5 @@
     * [API Methods](resources/frp\_core/server/api-methods.md)
     * [Groups Permission](resources/frp\_core/server/groups-permission.md)
     * [User](resources/frp\_core/server/user.md)
+    * [Character](resources/frp\_core/server/character.md)
     * [Events](resources/frp\_core/server/events.md)

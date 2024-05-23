@@ -55,6 +55,12 @@ firstName, lastName, birthDate, playerProfileCreation, equippedApparelsByType)
 User:DeleteCharacter( charId )
 ```
 
+### User:GetCharacter
+
+```lua
+User:GetCharacter()
+```
+
 ### User:SetCharacter
 
 ```lua

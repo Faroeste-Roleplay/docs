@@ -1,0 +1,494 @@
+# Client
+
+## openInventory
+
+Opens an inventory using the passed data.
+
+```lua
+exports.ox_inventory:openInventory(invType, data)
+```
+
+* invType: `string`
+  * `'player'`
+  * `'shop'`
+  * `'stash'`
+  * `'crafting'`
+  * `'container'`
+  * `'drop'`
+  * `'glovebox'`
+  * `'trunk'`
+  * `'dumpster'`
+* data: `number` or `string` or `table`
+
+\
+\*\*Examples\*\*
+
+\<Tabs items={\['Player', 'Shop', 'Stash']}> Open the target player's inventory.
+
+````
+```lua
+exports.ox_inventory:openInventory('player', 3)
+```
+````
+
+Open the fourth "General Store" \[location]\(https://github.com/overextended/ox\_inventory/blob/main/data/shops.lua#L14).
+
+````
+```lua
+exports.ox_inventory:openInventory('shop', { type = 'General', id = 4 })
+```
+````
+
+Open the first stash in \[data/stashes]\(https://github.com/overextended/ox\_inventory/blob/main/data/stashes.lua#L2-L19).
+
+````
+```lua
+exports.ox_inventory:openInventory('stash', 1)
+```
+
+Open a custom stash (created on the server with RegisterStash).
+
+```lua
+exports.ox_inventory:openInventory('stash', 'society_police')
+```
+
+Open a stash with a specific owner.
+
+```lua
+exports.ox_inventory:openInventory('stash', { id = 'police_locker', owner = 'license:xxxxxxxx' })
+```
+````
+
+## openNearbyInventory
+
+If possible opens the nearby player's inventory.
+
+The player trying to open the inventory must be able to open their own and if the player does not have a police job, the target player must be fatally injured or playing one of the death anims.
+
+```lua
+exports.ox_inventory:openNearbyInventory()
+```
+
+## closeInventory
+
+Closes the player's inventory.
+
+```lua
+exports.ox_inventory:closeInventory()
+```
+
+## Items
+
+Returns a table of all registered items. The format is as defined in [data/items.lua](https://github.com/overextended/ox_inventory/blob/main/data/items.lua).
+
+Optionally takes the name of an item, returning only data for that item (getting all data is not recommended).
+
+```lua
+exports.ox_inventory:Items(itemName)
+```
+
+* itemName?: `string`
+
+The following snippet can be used in crafting resources such as okokCrafting or core\_crafting, rather than retrieving information from the server.
+
+```lua
+local itemNames = {}
+
+for item, data in pairs(exports.ox_inventory:Items()) do
+    itemNames[item] = data.label
+end
+```
+
+## useItem
+
+Uses the passed item, then triggers the callback function.\
+Should be calling during item callbacks to utilise the builtin methods (server checks, progress bar, etc.).
+
+```lua
+exports.ox_inventory:useItem(data, cb)
+```
+
+* data: `table`
+* cb?: `function`
+
+```lua
+exports('bandage', function(data, slot)
+    local playerPed = PlayerPedId()
+    local maxHealth = GetEntityMaxHealth(playerPed)
+    local health = GetEntityHealth(playerPed)
+
+    -- Does the ped need to heal?
+    if health < maxHealth then
+        -- Use the bandage
+        exports.ox_inventory:useItem(data, function(data)
+            -- The item has been used, so trigger the effects
+            if data then
+                SetEntityHealth(playerPed, math.min(maxHealth, math.floor(health + maxHealth / 16)))
+                lib.notify({description = 'You feel better already'})
+            end
+        end)
+    else
+        -- Don't use the item
+        lib.notify({type = 'error', description = 'You don\'t need a bandage right now'})
+    end
+end)
+```
+
+## useSlot
+
+Uses the item in the given inventory slot.
+
+```lua
+exports.ox_inventory:useSlot(slot)
+```
+
+* slot: `number`
+
+## setStashTarget
+
+Forces the secondary-inventory key to open the passed inventory. Can be useful to enable inventory access while standing inside a marker.
+
+```lua
+exports.ox_inventory:setStashTarget(id, owner)
+```
+
+* id: `string` or `number`
+  * Stash id.
+* owner?: `string` or `number`
+
+\
+\*\*Example\*\*
+
+```lua
+exports.ox_inventory:setStashTarget('motel5', 'bobsmith')
+```
+
+## getCurrentWeapon
+
+Get data for the currently equipped weapon.
+
+```lua
+exports.ox_inventory:getCurrentWeapon()
+```
+
+You can also listen for changes to the current weapon using an event handler.
+
+```lua
+AddEventHandler('ox_inventory:currentWeapon', function(currentWeapon)
+	CurrentWeapon = currentWeapon
+end)
+```
+
+* currentWeapon?: `table`
+  * ammo?: `string` Name of the item used as ammo.
+  * hash: `number`
+  * label: `string`
+  * melee: `boolean`
+  * metadata: `table`
+    * ammo?: `number` Amount of ammo loaded into the weapon.
+    * components?: `table` Array of component item names, used to apply weapon components.
+    * durability?: `number`
+    * registered?: `string` Name of the player that bought the weapon at a shop.
+    * serial?: `string`
+  * name: `string` Name of the item.
+  * slot: `number`
+  * weight: `number`
+
+## displayMetadata
+
+Sets a metadata property to display in the tooltip.
+
+```lua
+exports.ox_inventory:displayMetadata(metadata, value)
+```
+
+* metadata: `string` or `table<string, string>` or `{ [string], [string] }`
+  * If metadata is a string then it's the metadata property you want to display, value is **not** optional then.
+  * Can be a table of key-value pairs, key being the metadata property and value being the label for that property.
+  * Can be an array of string arrays, i.e. `{ {'key', 'label' }, {'key2', 'label2' }` to set the display order.
+* value?: `string`
+  * Label for the string metadata property to be displayed.
+
+\
+\*\*Example\*\*
+
+```lua
+exports.ox_inventory:displayMetadata('mustard', 'Mustard')
+```
+
+```lua
+exports.ox_inventory:displayMetadata({
+    mustard = 'Mustard',
+    ketchup = 'Ketchup'
+})
+```
+
+## giveItemToTarget
+
+Gives an item from the player's inventory to another player.
+
+```lua
+exports.ox_inventory:giveItemToTarget(serverId, slotId, count)
+```
+
+* serverId: `number`
+  * The serverId of the target player.
+* slotId: `number`
+  * The slotId of the item to give.
+* count?: `number`
+  * The amount of the item to give, with `nil`, `0` or a value above the slot count giving the entire stack away.
+
+## weaponWheel
+
+Enables the weapon wheel, but disables the use of inventory weapons.
+
+Mostly used for weaponised vehicles, though could be called for "minigames"
+
+```lua
+local exports.ox_inventory:weaponWheel(state)
+```
+
+* state: `boolean`
+
+## Search
+
+Searches the inventory for an item, or list of items, with the result varying based on the first argument.
+
+```lua
+exports.ox_inventory:Search(search, item, metadata)
+```
+
+* search: `'slots'` or `'count'`
+  * `'slots'` returns a table of slots where the item was found at.
+  * `'count'` returns the count of the specified item in player's inventory. If searching for multiple items returns key-value pairs of itemName = count.
+* item: `table` or `string`
+  * Can be a single item name or array of item names.
+* metadata?: `table` or `string`
+  * If metadata is provided as a string it will search the item's `metadata.type` property.
+
+## Count
+
+\<Tabs items={\["Single item", "Multiple items"]}> `lua local count = exports.ox_inventory:Search('count', 'water') print('You have '..count.. ' water')` \`\`\`lua local inventory = exports.ox\_inventory:Search('count', {'meat', 'skin'}, {grade="1"})
+
+````
+if inventory then
+    for name, count in pairs(inventory) do
+        print('You have '..count..' '..name)
+    end
+end
+```
+````
+
+## Slots
+
+\<Tabs items={\["Single item", "Multiple items"]}> \`\`\`lua local water = exports.ox\_inventory:Search('slots', 'water') local count = 0
+
+````
+for _, v in pairs(water) do
+    print(v.slot..' contains '..v.count..' water '..json.encode(v.metadata))
+    count = count + v.count
+end
+
+print('You have '..count..' water')
+```
+````
+
+\`\`\`lua local items = exports.ox\_inventory:Search('slots', {'meat', 'skin'}, 'deer')
+
+````
+if items then
+    for name, data in pairs(items) do
+        local count = 0
+
+        for _, v in pairs(data) do
+            if v.slot then
+                print(v.slot..' contains '..v.count..' '..name..' '..json.encode(v.metadata))
+                count = count + v.count
+            end
+        end
+
+        print('You have '..count..' '..name)
+    end
+end
+```
+````
+
+## GetItemCount
+
+Get the total item count for all items in the player's inventory with the given name and metadata.
+
+```lua
+exports.ox_inventory:GetItemCount(itemName, metadata, strict)
+```
+
+* itemName: `string`
+* metadata?: `table`
+* strict?: `boolean`
+  * Strictly match metadata properties, otherwise use partial matching.
+
+Return:
+
+* count: `number`
+
+## GetPlayerItems
+
+Get all items in the player's inventory.
+
+```lua
+exports.ox_inventory:GetPlayerItems()
+```
+
+Return:
+
+* items: `table`
+
+## GetPlayerWeight
+
+Get the total weight of all items in the player's inventory.
+
+```lua
+exports.ox_inventory:GetPlayerWeight()
+```
+
+Return:
+
+* totalWeight: `number`
+
+## GetPlayerMaxWeight
+
+Get the maximum carry weight of the player's inventory.
+
+```lua
+exports.ox_inventory:GetPlayerMaxWeight()
+```
+
+Return:
+
+* maxWeight: `number`
+
+## GetSlotIdWithItem
+
+Get a slot id in the player's inventory matching the given name and metadata.
+
+```lua
+exports.ox_inventory:GetSlotIdWithItem(itemName, metadata, strict)
+```
+
+* itemName: `string`
+* metadata?: `table`
+* strict?: `boolean`
+  * Strictly match metadata properties, otherwise use partial matching.
+
+Return:
+
+* slotId: `number?`
+
+## GetSlotsIdWithItem
+
+Get all slot ids in the player's inventory matching the given name and metadata.
+
+```lua
+exports.ox_inventory:GetSlotIdsWithItem(itemName, metadata, strict)
+```
+
+* itemName: `string`
+* metadata?: `table`
+* strict?: `boolean`
+  * Strictly match metadata properties, otherwise use partial matching.
+
+Return:
+
+* slotIds: `number[]?`
+
+## GetSlotWithItem
+
+Get data for a slot in the player's inventory matching the given name and metadata.
+
+```lua
+exports.ox_inventory:GetSlotWithItem(itemName, metadata, strict)
+```
+
+* itemName: `string`
+* metadata?: `table`
+* strict?: `boolean`
+  * Strictly match metadata properties, otherwise use partial matching.
+
+Return:
+
+* slotData: `table?`
+
+## GetSlotsWithItem
+
+Get data all slots in the player's inventory matching the given name and metadata.
+
+```lua
+exports.ox_inventory:GetSlotsWithItem(itemName, metadata, strict)
+```
+
+* itemName: `string`
+* metadata?: `table`
+* strict?: `boolean`
+  * Strictly match metadata properties, otherwise use partial matching.
+
+Return:
+
+* slotsData: `table[]?`
+
+## Statebags
+
+## invBusy
+
+Returns whether the player's inventory is currently running an action (i.e. using an item).\
+Can be set to true to disable opening the inventory.
+
+* invBusy: `boolean`
+
+```lua
+local invBusy = LocalPlayer.state.invBusy
+
+if invBusy then
+    -- Do stuff when busy
+else
+    -- Do stuff when not busy
+end
+```
+
+**Disable opening inventory**
+
+```lua
+LocalPlayer.state.invBusy = true
+```
+
+## invHotkeys
+
+Allows you to enable/disable a player's access to inventory hotkeys.
+
+* invHotkeys: `boolean`
+
+```lua
+LocalPlayer.state.invHotkeys = false
+```
+
+## invOpen
+
+Returns whether the player's inventory is currently open or not.
+
+* invOpen: `boolean`
+
+```lua
+local invOpen = LocalPlayer.state.invOpen
+
+if invOpen then
+    -- Do stuff when open
+else
+    -- Do stuff when closed
+end
+```
+
+## canUseWeapons
+
+Allows you to enable/disable the use of weapons for a player.
+
+```lua
+LocalPlayer.state.canUseWeapons = false
+```

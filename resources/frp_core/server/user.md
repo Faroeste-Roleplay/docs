@@ -1,6 +1,6 @@
 # User
 
-Theres is a User instance, to get user check [API Methods](api-methods.md)
+Theres is a User instance, to get user check [API Methods](user-database-and-utility-api.md)
 
 * user
   * source: `number`

@@ -6,8 +6,8 @@ description: >-
 
 # frp\_core
 
-{% hint style="warning" %}
-This resource does not have a stable (v1.0) release; breaking changes are likely. Documentation may not be kept updated in some cases.
+{% hint style="success" %}
+This resource is now in a stable (v1.0) release; breaking changes are unlikely. Documentation is kept updated.
 {% endhint %}
 
 ### Installation <a href="#installation" id="installation"></a>

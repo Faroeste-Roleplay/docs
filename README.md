@@ -6,8 +6,8 @@ description: >-
 
 # Introduction
 
-{% hint style="warning" %}
-This framework does not have a stable (v1.0) release; breaking changes are likely. Documentation may not be kept updated in some cases.
+{% hint style="success" %}
+This resource is now in a stable (v1.0) release; breaking changes are unlikely. Documentation is kept updated.
 {% endhint %}
 
 ## About Us

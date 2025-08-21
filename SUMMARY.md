@@ -31,6 +31,8 @@
     * [PromptHelper](resources/frp_lib/client-functions/prompthelper.md)
     * [Utility Functions](resources/frp_lib/client-functions/utility-functions.md)
     * [Progress Bar System](resources/frp_lib/client-functions/progress-bar-system.md)
+    * [Ped Camera System](resources/frp_lib/client-functions/ped-camera-system.md)
+    * [Orbital Camera System](resources/frp_lib/client-functions/orbital-camera-system.md)
 * [ox\_inventory](resources/ox_inventory/README.md)
   * [Events](resources/ox_inventory/events/README.md)
     * [Client](resources/ox_inventory/events/client.md)

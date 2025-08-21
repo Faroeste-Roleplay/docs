@@ -29,7 +29,6 @@
   * [Client Functions](resources/frp_lib/client-functions/README.md)
     * [PromptBuilder](resources/frp_lib/client-functions/promptbuilder.md)
     * [PromptHelper](resources/frp_lib/client-functions/prompthelper.md)
-    * [Utility Functions](resources/frp_lib/client-functions/utility-functions.md)
     * [Progress Bar System](resources/frp_lib/client-functions/progress-bar-system.md)
     * [Ped Camera System](resources/frp_lib/client-functions/ped-camera-system.md)
     * [Orbital Camera System](resources/frp_lib/client-functions/orbital-camera-system.md)

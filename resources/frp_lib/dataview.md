@@ -2,18 +2,18 @@
 
 The DataView library provides a JavaScript-like interface for working with binary data in Lua, similar to the JavaScript ArrayBuffer and DataView APIs. It allows you to read and write different data types from binary strings with precise control over byte order (endianness).
 
-### Overview
+## Overview
 
 DataView consists of two main classes:
 
 * `DataView`: For random access to binary data
 * `DataStream`: For sequential reading of binary data
 
-### DataView Class
+## DataView Class
 
-#### Constructor Methods
+### Constructor Methods
 
-**`DataView.ArrayBuffer(length)`**
+#### `DataView.ArrayBuffer`
 
 Creates a new DataView with a buffer of the specified length.
 
@@ -25,13 +25,11 @@ Creates a new DataView with a buffer of the specified length.
 
 **Example:**
 
-lua
-
 ```lua
 local buffer = DataView.ArrayBuffer(1024)
 ```
 
-**`DataView.Wrap(blob)`**
+#### `DataView.Wrap`
 
 Wraps an existing binary string in a DataView.
 
@@ -43,34 +41,32 @@ Wraps an existing binary string in a DataView.
 
 **Example:**
 
-lua
-
 ```lua
 local binaryData = "\x00\x01\x02\x03"
 local view = DataView.Wrap(binaryData)
 ```
 
-#### Instance Methods
+### Instance Methods
 
-**`DataView:Buffer()`**
+#### `DataView:Buffer`
 
 Returns the underlying binary data.
 
 **Returns:** Binary string
 
-**`DataView:ByteLength()`**
+#### `DataView:ByteLength`
 
 Returns the length of the buffer in bytes.
 
 **Returns:** Number of bytes
 
-**`DataView:ByteOffset()`**
+#### `DataView:ByteOffset`
 
 Returns the current byte offset.
 
 **Returns:** Byte offset
 
-**`DataView:SubView(offset)`**
+#### `DataView:SubView`
 
 Creates a new DataView starting at the specified offset.
 
@@ -80,25 +76,39 @@ Creates a new DataView starting at the specified offset.
 
 **Returns:** New DataView instance
 
-### Data Types
+## Data Types
 
 The library supports various data types through the `DataView.Types` table:
 
-```
-```
+| Type    | Code | Size (bytes) | Description             |
+| ------- | ---- | ------------ | ----------------------- |
+| Int8    | i1   | 1            | Signed 8-bit integer    |
+| Uint8   | I1   | 1            | Unsigned 8-bit integer  |
+| Int16   | i2   | 2            | Signed 16-bit integer   |
+| Uint16  | I2   | 2            | Unsigned 16-bit integer |
+| Int32   | i4   | 4            | Signed 32-bit integer   |
+| Uint32  | I4   | 4            | Unsigned 32-bit integer |
+| Int64   | i8   | 8            | Signed 64-bit integer   |
+| Uint64  | I8   | 8            | Unsigned 64-bit integer |
+| LuaInt  | j    | 8            | Lua integer             |
+| UluaInt | J    | 8            | Unsigned Lua integer    |
+| LuaNum  | n    | 8            | Lua number              |
+| Float32 | f    | 4            | 32-bit float            |
+| Float64 | d    | 8            | 64-bit float            |
+| String  | z    | -1           | Null-terminated string  |
 
-#### Endianness
+### Endianness
 
 * `DataView.EndBig` (`">"`) - Big-endian byte order
 * `DataView.EndLittle` (`"<"`) - Little-endian byte order
 
-### Generated Methods
+## Generated Methods
 
 For each data type, the library automatically generates getter and setter methods:
 
-#### Get Methods
+### Get Methods
 
-Pattern: `DataView:Get[Type](offset, endian)`
+Pattern: `DataView:Get[Type]`
 
 **Parameters:**
 
@@ -109,17 +119,15 @@ Pattern: `DataView:Get[Type](offset, endian)`
 
 **Examples:**
 
-lua
-
 ```lua
 local view = DataView.ArrayBuffer(8)
 local value = view:GetInt32(0, true)  -- Read big-endian 32-bit int at offset 0
 local byte = view:GetUint8(4)         -- Read unsigned byte at offset 4
 ```
 
-#### Set Methods
+### Set Methods
 
-Pattern: `DataView:Set[Type](offset, value, endian)`
+Pattern: `DataView:Set[Type]`
 
 **Parameters:**
 
@@ -131,33 +139,31 @@ Pattern: `DataView:Set[Type](offset, value, endian)`
 
 **Examples:**
 
-lua
-
 ```lua
 local view = DataView.ArrayBuffer(8)
 view:SetInt32(0, 12345, true)    -- Write big-endian 32-bit int
 view:SetUint8(4, 255)            -- Write unsigned byte
 ```
 
-### Fixed-Size Methods
+## Fixed-Size Methods
 
 For working with fixed-size data:
 
-#### `DataView:GetFixedString(offset, typelen, endian)`
+### `DataView:GetFixedString`
 
 Reads a fixed-length string.
 
-#### `DataView:SetFixedString(offset, typelen, value, endian)`
+### `DataView:SetFixedString`
 
 Writes a fixed-length string.
 
-### DataStream Class
+## DataStream Class
 
 DataStream provides sequential access to DataView data, automatically advancing the read position.
 
-#### Constructor
+### Constructor
 
-**`DataStream.New(view)`**
+#### `DataStream.New`
 
 Creates a new DataStream from a DataView.
 
@@ -169,16 +175,14 @@ Creates a new DataStream from a DataView.
 
 **Example:**
 
-lua
-
 ```lua
 local view = DataView.Wrap(binaryData)
 local stream = DataStream.New(view)
 ```
 
-#### Reading Methods
+### Reading Methods
 
-For each data type, DataStream provides reading methods: Pattern: `DataStream:[Type](endian, align)`
+For each data type, DataStream provides reading methods: Pattern: `DataStream:[Type]`
 
 **Parameters:**
 
@@ -189,8 +193,6 @@ For each data type, DataStream provides reading methods: Pattern: `DataStream:[T
 
 **Examples:**
 
-lua
-
 ```lua
 local stream = DataStream.New(view)
 local int32 = stream:Int32(true)     -- Read big-endian 32-bit int
@@ -198,11 +200,9 @@ local byte = stream:Uint8()          -- Read unsigned byte
 local float = stream:Float32(false)  -- Read little-endian float
 ```
 
-### Usage Examples
+## Usage Examples
 
-#### Basic Usage
-
-lua
+### Basic Usage
 
 ```lua
 -- Create a buffer and write some data
@@ -217,9 +217,7 @@ local floatVal = buffer:GetFloat32(4, false)
 local byteVal = buffer:GetUint8(8)
 ```
 
-#### Sequential Reading with DataStream
-
-lua
+### Sequential Reading with DataStream
 
 ```lua
 local binaryData = "\x12\x34\x56\x78\x40\x49\x0f\xdb"
@@ -230,9 +228,7 @@ local int32 = stream:Int32(true)     -- Reads 0x12345678
 local float32 = stream:Float32(true) -- Reads next 4 bytes as float
 ```
 
-#### Working with Strings
-
-lua
+### Working with Strings
 
 ```lua
 local buffer = DataView.ArrayBuffer(32)
@@ -240,7 +236,7 @@ buffer:SetString(0, "Hello World")
 local text = buffer:GetString(0)
 ```
 
-### Error Handling
+## Error Handling
 
 * Methods return `nil` when trying to read/write beyond buffer bounds
 * The library validates data type sizes against Lua's string.pack capabilities

@@ -1,8 +1,8 @@
-# DeferralCards
+# DeferralCards (Server)
 
 The DeferralCards library provides a comprehensive API for creating Adaptive Cards in Lua. Adaptive Cards are a platform-agnostic way to create rich, interactive content that can be rendered across various applications and platforms.
 
-### Overview
+## Overview
 
 The library is structured into five main modules:
 
@@ -12,7 +12,7 @@ The library is structured into five main modules:
 * `Action`: Interactive elements
 * `Input`: Form input elements
 
-### Installation
+## Installation
 
 The library exports itself as a module:
 
@@ -20,9 +20,9 @@ The library exports itself as a module:
 local DeferralCards = exports('DeferralCards')()
 ```
 
-### Card Module
+## Card Module
 
-#### `DeferralCards.Card:Create(options)`
+### `DeferralCards.Card:Create`
 
 Creates a complete Adaptive Card with the specified options.
 
@@ -57,9 +57,9 @@ local card = DeferralCards.Card:Create({
 })
 ```
 
-### CardElement Module
+## CardElement Module
 
-#### `DeferralCards.CardElement:TextBlock(options)`
+### `DeferralCards.CardElement:TextBlock`
 
 Creates a text block element for displaying formatted text.
 
@@ -93,7 +93,7 @@ local textBlock = DeferralCards.CardElement:TextBlock({
 })
 ```
 
-#### `DeferralCards.CardElement:Image(options)`
+### `DeferralCards.CardElement:Image`
 
 Creates an image element.
 
@@ -123,7 +123,7 @@ local image = DeferralCards.CardElement:Image({
 })
 ```
 
-#### `DeferralCards.CardElement:Media(options)`
+### `DeferralCards.CardElement:Media`
 
 Creates a media element for video/audio content.
 
@@ -150,7 +150,7 @@ local media = DeferralCards.CardElement:Media({
 })
 ```
 
-#### `DeferralCards.CardElement:MediaSource(options)`
+### `DeferralCards.CardElement:MediaSource`
 
 Creates a media source for use within Media elements.
 
@@ -163,7 +163,7 @@ Creates a media source for use within Media elements.
 * `mimeType`: "video/mp4"
 * `url`: ""
 
-#### `DeferralCards.CardElement:RichTextBlock(options)`
+### `DeferralCards.CardElement:RichTextBlock`
 
 Creates a rich text block with inline formatting.
 
@@ -194,7 +194,7 @@ local richText = DeferralCards.CardElement:RichTextBlock({
 })
 ```
 
-#### `DeferralCards.CardElement:RichTextBlockItem(options)`
+### `DeferralCards.CardElement:RichTextBlockItem`
 
 Creates an inline text run for use within RichTextBlock.
 
@@ -217,9 +217,9 @@ Creates an inline text run for use within RichTextBlock.
 * `strikethrough` (boolean): Whether to strike through
 * `weight` (string): Font weight
 
-### Container Module
+## Container Module
 
-#### `DeferralCards.Container:Create(options)`
+### `DeferralCards.Container:Create`
 
 Creates a basic container for grouping elements.
 
@@ -243,7 +243,7 @@ local container = DeferralCards.Container:Create({
 })
 ```
 
-#### `DeferralCards.Container:ActionSet(options)`
+### `DeferralCards.Container:ActionSet`
 
 Creates a container for action buttons.
 
@@ -270,7 +270,7 @@ local actionSet = DeferralCards.Container:ActionSet({
 })
 ```
 
-#### `DeferralCards.Container:ColumnSet(options)`
+### `DeferralCards.Container:ColumnSet`
 
 Creates a set of columns for layout.
 
@@ -283,7 +283,7 @@ Creates a set of columns for layout.
 * `type`: "ColumnSet"
 * `columns`: {} (empty array)
 
-#### `DeferralCards.Container:Column(options)`
+### `DeferralCards.Container:Column`
 
 Creates a column within a ColumnSet.
 
@@ -321,7 +321,7 @@ local columnSet = DeferralCards.Container:ColumnSet({
 })
 ```
 
-#### `DeferralCards.Container:FactSet(options)`
+### `DeferralCards.Container:FactSet`
 
 Creates a fact set for displaying key-value pairs.
 
@@ -351,7 +351,7 @@ local factSet = DeferralCards.Container:FactSet({
 })
 ```
 
-#### `DeferralCards.Container:ImageSet(options)`
+### `DeferralCards.Container:ImageSet`
 
 Creates a set of images displayed together.
 
@@ -364,9 +364,9 @@ Creates a set of images displayed together.
 * `type`: "ImageSet"
 * `images`: {} (empty array)
 
-### Action Module
+## Action Module
 
-#### `DeferralCards.Action:OpenUrl(options)`
+### `DeferralCards.Action:OpenUrl`
 
 Creates an action that opens a URL when triggered.
 
@@ -388,7 +388,7 @@ local openAction = DeferralCards.Action:OpenUrl({
 })
 ```
 
-#### `DeferralCards.Action:Submit(options)`
+### `DeferralCards.Action:Submit`
 
 Creates a submit action for form submission.
 
@@ -412,7 +412,7 @@ local submitAction = DeferralCards.Action:Submit({
 })
 ```
 
-#### `DeferralCards.Action:ShowCard(options)`
+### `DeferralCards.Action:ShowCard`
 
 Creates an action that shows another card.
 
@@ -424,7 +424,7 @@ Creates an action that shows another card.
 
 * `type`: "Action.ShowCard"
 
-#### `DeferralCards.Action:ToggleVisibility(options)`
+### `DeferralCards.Action:ToggleVisibility`
 
 Creates an action that toggles element visibility.
 
@@ -451,7 +451,7 @@ local toggleAction = DeferralCards.Action:ToggleVisibility({
 })
 ```
 
-#### `DeferralCards.Action:Execute(options)`
+### `DeferralCards.Action:Execute`
 
 Creates a custom execute action.
 
@@ -463,9 +463,9 @@ Creates a custom execute action.
 
 * `type`: "Action.Execute"
 
-### Input Module
+## Input Module
 
-#### `DeferralCards.Input:Text(options)`
+### `DeferralCards.Input:Text`
 
 Creates a text input field.
 
@@ -488,7 +488,7 @@ local textInput = DeferralCards.Input:Text({
 })
 ```
 
-#### `DeferralCards.Input:Number(options)`
+### `DeferralCards.Input:Number`
 
 Creates a number input field.
 
@@ -512,11 +512,11 @@ local numberInput = DeferralCards.Input:Number({
 })
 ```
 
-#### `DeferralCards.Input:Date(options)` / `DeferralCards.Input:Time(options)`
+### `DeferralCards.Input:Date` / `DeferralCards.Input:Time`
 
 Creates date and time input fields.
 
-#### `DeferralCards.Input:Toggle(options)`
+### `DeferralCards.Input:Toggle`
 
 Creates a toggle (checkbox) input.
 
@@ -530,7 +530,7 @@ Creates a toggle (checkbox) input.
 * `title`: "Title"
 * `id`: "input\_toggle"
 
-#### `DeferralCards.Input:ChoiceSet(options)`
+### `DeferralCards.Input:ChoiceSet`
 
 Creates a choice set (dropdown/radio buttons).
 
@@ -563,7 +563,7 @@ local choiceSet = DeferralCards.Input:ChoiceSet({
 })
 ```
 
-### Complete Example
+## Complete Example
 
 ```lua
 local card = DeferralCards.Card:Create({
